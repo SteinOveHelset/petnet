@@ -3,9 +3,19 @@
 {% block title %}{{ product.title }}{% endblock %}
 
 {% block content %}
+    {% if product.image %}
+    <div class="image mb-4">
+        <img src="{{ product.image.url }}" alt="Image of {{ product.title }}">
+    </div>
+    {% endif %}
+
     <h1 class="text-2xl">{{ product.title }}</h1>
 
-    <p class="text-xs text-gray-500">${{ product.get_display_price }}</p>
+    <p class="text-xs text-gray-500">
+        ${{ product.get_display_price }}
+        -
+        <a href="{% url 'vendor_detail' product.user.id %}">{% firstof product.user.get_full_name product.user.username %}</a>
+    </p>
 
     {% if product.description %}
         <p class="mt-4">
