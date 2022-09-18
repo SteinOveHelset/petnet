@@ -19,17 +19,23 @@
             </div>
 
             <div class="search">
-                <form method="get" action="/search/">
-                    <input type="search" name="query" placeholder="Search...">
-                    <button>Search</button>
+                <form method="get" action="/search/" class="flex items-center space-x-4">
+                    <input type="search" name="query" placeholder="Search..." class="py-2 px-4 rounded-xl">
+                    
+                    <button>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                          </svg>                          
+                    </button>
                 </form>
             </div>
 
-            <div class="menu flex space-x-4">
+            <div class="menu flex items-center space-x-4">
                 {% menu %}
 
                 {% if request.user.is_authenticated %}
-                    <a href="{% url 'myaccount' %}" class="text-white">My account</a>
+                    <a href="{% url 'myaccount' %}" class="py-2 px-4 bg-teal-800 text-white rounded-xl hover:bg-teal-900">My account</a>
+                    <a href="{% url 'my_store' %}" class="py-2 px-4 bg-teal-800 text-white rounded-xl hover:bg-teal-900">My store</a>
                 {% endif %}
             </div>
         </nav>
