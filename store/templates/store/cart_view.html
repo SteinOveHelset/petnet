@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+    <h1 class="text-2xl">Cart</h1>
+
+    {% for item in cart %}
+        <p class="mb-2">
+            <b>Title: </b>{{ item.product.title }}<br>
+            <b>Quantity: </b>{{ item.quantity }}<br>
+            <a href="{% url 'remove_from_cart' item.product.id %}">Remove from cart</a>
+        </p>
+    {% endfor %}
+
+    <strong>Total cost: </strong>{{ cart.get_total_cost }}
+{% endblock %}
