@@ -9,6 +9,10 @@
         <p class="mb-2">
             <b>Title: </b>{{ item.product.title }}<br>
             <b>Quantity: </b>{{ item.quantity }}<br>
+
+            <a href="{% url 'change_quantity' item.product.id %}?action=increase">Increase +</a>
+            <a href="{% url 'change_quantity' item.product.id %}?action=decrease">Decrease -</a>
+
             <a href="{% url 'remove_from_cart' item.product.id %}">Remove from cart</a>
         </p>
     {% endfor %}

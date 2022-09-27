@@ -36,11 +36,14 @@ class Cart(object):
         
         if update_quantity:
             self.cart[product_id]['quantity'] += int(quantity)
+            
+            if self.cart[product_id]['quantity'] == 0:
+                self.remove(product_id)
         
         self.save()
     
     def remove(self, product_id):
-        if str(product_id) in self.cart:
+        if product_id in self.cart:
             del self.cart[product_id]
 
             self.save()
