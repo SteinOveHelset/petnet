@@ -82,7 +82,7 @@ class Order(models.Model):
     city = models.CharField(max_length=255)
     paid_amount = models.IntegerField(blank=True, null=True)
     is_paid = models.BooleanField(default=False)
-    merchant_id = models.CharField(max_length=255)
+    payment_intent = models.CharField(max_length=255)
     created_by = models.ForeignKey(User, related_name='orders', on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -91,3 +91,6 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, related_name='items', on_delete=models.CASCADE)
     price = models.IntegerField()
     quantity = models.IntegerField(default=1)
+    
+    def get_display_price(self):
+        return self.price / 100

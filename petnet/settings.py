@@ -61,6 +61,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'petnet.urls'
 
+WEBSITE_URL = 'http://127.0.0.1:8002/'
+
+STRIPE_PUB_KEY = 'pk_test_51HIHiuKBJV2qfWbDh2lEbabbfNVwnf4TTabNQOtTD2F8z44uMesvkKpKXCUFUePNKpZ99JSORZh6gsa17IhfV30U00P9iFVCqQ'
+STRIPE_SECRET_KEY = 'sk_test_51HIHiuKBJV2qfWbDvOA4nKbkuus4jNey2ePMXwoyf6cRwMRaQIPZ1VpAeWThUU85wbfLSUbHf7w5yJmvhtH5HHai00J6IfUBEA'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
