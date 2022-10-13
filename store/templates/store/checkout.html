@@ -9,48 +9,101 @@
 
     {{ form.as_p }}
 
-    <button class="inline-block px-8 py-4 bg-teal-500 text-white" onclick="buy(event)">Checkout</button>
+    <div id="errors" class="hidden my-3 px-4 py-4 bg-red-200 rounded-xl"></div>
+
+    <button class="inline-block px-8 py-4 bg-teal-500 text-white rounded-xl" onclick="buy(event)">Checkout</button>
 {% endblock %}
 
 {% block scripts %}
 <script type="application/javascript" src="https://js.stripe.com/v3/"></script>
 <script>
+    function validate(first_name, last_name, address, zipcode, city) {
+        let errors = [];
+
+        if (first_name == '') {
+            errors.push('The first name is missing');
+        }
+
+        if (last_name == '') {
+            errors.push('The last name is missing');
+        }
+
+        if (address == '') {
+            errors.push('The address is missing');
+        }
+
+        if (zipcode == '') {
+            errors.push('The zipcode is missing');
+        }
+
+        if (city == '') {
+            errors.push('The city is missing');
+        }
+
+        let html = '';
+
+        for (let i = 0; i < errors.length; i++) {
+            html += errors[i] + '<br>';
+        }
+
+        let errorsElement = document.getElementById('errors');
+    
+        if (errors.length) {
+            errorsElement.classList.remove('hidden');
+            errorsElement.innerHTML = html;
+
+            return false;
+        } else {
+            errorsElement.classList.add('hidden');
+
+            return true;
+        }
+    }
+
     function buy(event) {
         event.preventDefault();
 
-        let data = {
-            'first_name': document.getElementById('id_first_name').value,
-            'last_name': document.getElementById('id_last_name').value,
-            'address': document.getElementById('id_address').value,
-            'zipcode': document.getElementById('id_zipcode').value,
-            'city': document.getElementById('id_city').value,
-        }
+        const first_name = document.getElementById('id_first_name').value;
+        const last_name = document.getElementById('id_last_name').value;
+        const address = document.getElementById('id_address').value;
+        const zipcode = document.getElementById('id_zipcode').value;
+        const city = document.getElementById('id_city').value;
 
-        let stripe = Stripe('{{ pub_key }}');
-
-        fetch('/cart/checkout/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            credentials: 'same-origin',
-            body: JSON.stringify(data)
-        })
-        .then(function(response) {
-            return response.json()
-        })
-        .then(function(session) {
-            return stripe.redirectToCheckout({ sessionId: session.session.id })
-        })
-        .then(function(result) {
-            if (result.error) {
-                alert(result.error.message)
+        if (validate(first_name, last_name, address, zipcode, city)) {
+            let data = {
+                'first_name': first_name,
+                'last_name': last_name,
+                'address': address,
+                'zipcode': zipcode,
+                'city': city,
             }
-        })
-        .catch(function(error) {
-            alert(error)
-        });
+
+            let stripe = Stripe('{{ pub_key }}');
+
+            fetch('/cart/checkout/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify(data)
+            })
+            .then(function(response) {
+                return response.json()
+            })
+            .then(function(session) {
+                return stripe.redirectToCheckout({ sessionId: session.session.id })
+            })
+            .then(function(result) {
+                if (result.error) {
+                    alert(result.error.message)
+                }
+            })
+            .catch(function(error) {
+                alert(error)
+            });
+        }
 
         return false;
     }
